@@ -1,4 +1,4 @@
-# 📷 FlirMultiCamera – v1.0.0
+# 📷 flirmulticamera – v1.0.0
 
 C++ Library to record synchronized videos and images using [synchronizable Flir Cameras](https://flir.custhelp.com/app/answers/detail/a_id/3385/~/flir-cameras---trigger-vs.-sync-vs.-record-start) on Ubuntu. Also contains python bindings.
 
