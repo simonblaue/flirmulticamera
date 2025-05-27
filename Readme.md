@@ -14,6 +14,8 @@ If you use this software, please use the GitHub **“Cite this repository”** b
 ### 🧪 Tested with 
 * Spinnaker-2.4.0.143-Ubuntu20.04-amd64-pkg.tar.gz
 * 5x Flir Grasshopper GS3-U3-32S-4C
+* [cpp_utils v1.0.0](https://github.com/HenrikTrom/cpp-utils)
+* pybind11-dev
 
 ### Requirements
 
