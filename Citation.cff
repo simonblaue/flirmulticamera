@@ -1,0 +1,28 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "FlirMultiCamera"
+version: 1.0.0
+doi: 10.5281/zenodo.1234567
+date-released: 2025-05-27
+license: BSD-3-Clause
+url: https://github.com/HenrikTrom/FlirMultiCamera
+repository-code: https://github.com/HenrikTrom/FlirMultiCamera
+abstract: "C++ Library to record synchronized videos and images using synchronizable Flir Cameras on Ubuntu."
+authors:
+  - family-names: Trommer
+    given-names: Henrik
+    orcid: https://orcid.org/0009-0002-3110-0963
+    affiliation: University of Göttingen
+  - family-names: Cheng
+    given-names: Minghao
+    orcid: https://orcid.org/0009-0002-9162-2536
+    affiliation: University of Göttingen
+keywords:
+  - synchronization
+  - video recording
+  - image acquisition
+  - camera control
+  - open source
+  - research software
+  - c++
+  - python
