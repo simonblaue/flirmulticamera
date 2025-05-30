@@ -12,7 +12,6 @@ int main(int argc, char **argv)
     // load camera settings
     std::size_t n_capture_frames=30;
     CameraSettings settings;
-    std::cout << argc <<std::endl;
     if (argc == 2 || argc == 3)
     {
         std::string config_file = std::string(argv[1]);
