@@ -14,6 +14,7 @@ message(STATUS "OpenCV version: ${OPENCV_VERSION}")
 find_package(OpenCV ${OPENCV_VERSION} REQUIRED)
 find_package(cpp_utils REQUIRED)
 find_package(pybind11 REQUIRED)
+message("Python version ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 set(RAPIDJSON_INCLUDE_DIRS "~/libs/rapidjson/include")
 set(SPINNAKER_INCLUDE_DIRS "/opt/spinnaker/include/")
@@ -169,3 +170,14 @@ install(FILES
 install(DIRECTORY src/ DESTINATION /usr/local/include/${PROJECT_NAME}
   FILES_MATCHING PATTERN "*.hpp" PATTERN "*.h"
 ) 
+
+# install python bindings
+execute_process(
+  COMMAND python3 -c "import site; print(site.getsitepackages()[0])"
+  OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+  OUTPUT_STRIP_TRAILING_WHITESPACE
+)
+
+install(TARGETS pyflircam
+  LIBRARY DESTINATION ${PYTHON_SITE_PACKAGES}
+)

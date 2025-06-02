@@ -1,6 +1,3 @@
-import sys
-# or wherever pyflircam.so is
-sys.path.append("/home/docker/workspace/build/dependencies/FlirMultiCamera/build")  
 import pyflircam
 import cv2
 

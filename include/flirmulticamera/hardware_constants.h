@@ -6,7 +6,7 @@
 
 namespace flirmulticamera {
 
-constexpr std::string_view CONFIG_DIR = "/home/docker/workspace/build/dependencies/FlirMultiCamera/cfg";
+constexpr std::string_view CONFIG_DIR = "/home/docker/workspace/build/dependencies/flirmulticamera/cfg";
 constexpr std::string_view GLOBAL_CONST_MASTER_LINE = "Line2";
 constexpr std::string_view GLOBAL_CONST_SLAVE_LINE = "Line3";
 constexpr std::size_t GLOBAL_CONST_NCAMS = 5;
