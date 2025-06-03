@@ -4,6 +4,8 @@
 
 C++ Library to record synchronized videos and images using [synchronizable Flir Cameras](https://flir.custhelp.com/app/answers/detail/a_id/3385/~/flir-cameras---trigger-vs.-sync-vs.-record-start) on Ubuntu. Also contains python bindings.
 
+This module is part of my  **ROS/ROS2** [real-time 3D tracker](https://github.com/HenrikTrom/real-time-3D-tracking) and its [docker-implementation](https://github.com/HenrikTrom/ROSTrack-RT-3D).
+
 ![System Setup](content/4cams.gif)
 
 ### 📑 Citation
