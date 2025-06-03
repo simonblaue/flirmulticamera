@@ -30,6 +30,6 @@ struct CameraSettings
  * @param [out] settings Settings object to store data
  * \return true if settings could get loaded, false otherwise.
  */
-bool load_camera_settings(const std::string& type, CameraSettings& settings);
+bool load_camera_settings(const std::string& settings_path, CameraSettings& settings);
 
 } // namespace flirmulticamera

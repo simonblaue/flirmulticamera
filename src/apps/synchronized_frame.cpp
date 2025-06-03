@@ -87,7 +87,6 @@ int main(int argc, char **argv)
                 cv::imwrite(filename, cvImg);
                 spdlog::info("Saved image {}", filename);
             }
-
         }
 
         if (!success)
