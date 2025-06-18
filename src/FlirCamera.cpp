@@ -21,7 +21,7 @@ FLirCameraImageEventHandler::FLirCameraImageEventHandler(CameraPtr pCam, double 
     this->FrameCounter = 0;
     this->BufferingFlag = false;
     timespec now{};
-    clock_gettime(CLOCK_REALTIME, &now);
+    clock_gettime(CLOCK_MONOTONIC, &now);
     this->PreviousTimestamp = now;
     this->T = T;
     this->MarginOfError = T;
@@ -36,7 +36,7 @@ FLirCameraImageEventHandler::~FLirCameraImageEventHandler()
 void FLirCameraImageEventHandler::OnImageEvent(ImagePtr img)
 {
     timespec monotime{};
-    clock_gettime(CLOCK_REALTIME, &monotime);
+    clock_gettime(CLOCK_MONOTONIC, &monotime);
     // std::cout << this->SN << ", " << static_cast<double>(monotime.tv_sec) << ", " << static_cast<double>(monotime.tv_nsec) * 1e-6 << "\n";
     // Check image retrieval status
     if (img->IsIncomplete())
@@ -108,7 +108,7 @@ bool FLirCameraImageEventHandler::Get(Frame &frame)
 void FLirCameraImageEventHandler::Start(void)
 {
     timespec now{};
-    clock_gettime(CLOCK_REALTIME, &now);
+    clock_gettime(CLOCK_MONOTONIC, &now);
     this->FrameCounter = 0;
     this->PreviousTimestamp = now;
     this->BufferingFlag = true;
