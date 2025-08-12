@@ -131,6 +131,7 @@ void FLirCameraImageEventHandler::Pop(void)
     }
 }
 
+// TODO dynamic
 FlirCameraHandler::FlirCameraHandler(CameraSettings CamSettings) : CamSettings(CamSettings)
 {
     for (int i = 0; i < GLOBAL_CONST_NCAMS; i++)
@@ -306,6 +307,7 @@ bool FlirCameraHandler::Configure(void)
 {
     this->system = System::GetInstance();
     this->camList = this->system->GetCameras();
+    // TODO Dynamic
     if (this->camList.GetSize() < GLOBAL_CONST_NCAMS)
     {
         spdlog::error(
@@ -418,7 +420,7 @@ bool FlirCameraHandler::Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame)
         }
         // i++;
     }
-    for (std::uint8_t i = 0; i< GLOBAL_CONST_NCAMS; i++)
+    for (std::size_t i = 0; i<frame.size(); i++)
     {
         Frame frame_one_cam;
         if (!this->imageEventHandlers.at(i)->Get(frame.at(i)))
@@ -429,8 +431,8 @@ bool FlirCameraHandler::Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame)
 
     if (result)
     {
-        std::vector<uint64_t> ts_tests{GLOBAL_CONST_NCAMS};
-        for (int j = 0; j<this->imageEventHandlers.size(); j++)
+        std::vector<uint64_t> ts_tests{frame.size()};
+        for (std::size_t j = 0; j<this->imageEventHandlers.size(); j++)
         {
             uint64_t value = frame.at(j).Timestamp.tv_sec * 1e3 + (frame.at(j).Timestamp.tv_nsec * 1e-6);
         }
