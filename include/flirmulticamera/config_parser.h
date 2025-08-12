@@ -21,6 +21,7 @@ struct CameraSettings
     double gain = 0.;
     double exposure_time = 0.;
     std::string save_dir = "";
+    std::string codec = "";
 };
 
 /**
