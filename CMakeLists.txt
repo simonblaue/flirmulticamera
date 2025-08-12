@@ -14,6 +14,7 @@ message(STATUS "OpenCV version: ${OPENCV_VERSION}")
 find_package(OpenCV ${OPENCV_VERSION} REQUIRED)
 find_package(cpp_utils REQUIRED)
 find_package(pybind11 REQUIRED)
+find_package(fmt REQUIRED)
 message("Python version ${PYTHON_VERSION_MAJOR}.${PYTHON_VERSION_MINOR}")
 
 set(RAPIDJSON_INCLUDE_DIRS "~/libs/rapidjson/include")
@@ -92,6 +93,7 @@ set(libraries
   ${AVUTIL_LIBRARY} 
   ${AVDEVICE_LIBRARY} 
   ${AVSWSCALE_LIBRARY}
+  fmt::fmt
   cpp_utils
 )
 

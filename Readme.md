@@ -24,6 +24,8 @@ If you use this software, please use the GitHub **“Cite this repository”** b
 * USB Card to handle all the video input
 * Synchronization cable that connects master cameras Trigger Pin to the Slave cameras input pins.
 * We use `Line2` on the Master and `Line3` for the Slave cameras.
+* [cpp_utils v1.0.0](https://github.com/HenrikTrom/cpp_utils)
+* `fmt` and `ffmpeg`
 
 1. Download and install the [Spinnaker SDK](https://www.teledynevisionsolutions.com/products/spinnaker-sdk/?model=Spinnaker%20SDK&vertical=machine%20vision&segment=iisflir ). Make sure that you can run Spinview and that you can get a stable video of each camera.
 2. Declare the following environment variables:
