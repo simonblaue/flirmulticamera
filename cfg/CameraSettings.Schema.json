@@ -4,6 +4,8 @@
     "properties": {
       "img_width": {"type": "integer"},
       "img_height": {"type": "integer"},
+      "img_offsetX": {"type": "integer"},
+      "img_offsetY": {"type": "integer"},
       "fps": {"type": "number"},
       "pixel_format": {
         "enum": ["BayerGB8", "YCbCr422_8_CbYCrY", "RGB8"]

@@ -13,6 +13,8 @@ struct CameraSettings
 {
     int width = 0;
     int height = 0;
+    int offsetX = 0;
+    int offsetY = 0;
     int binning_vertical = 0;
     std::string pixel_format = "ErrorNotLoadedPixelFormat";
     std::string video_mode = "ErrorNotLoadedVideoMode";
