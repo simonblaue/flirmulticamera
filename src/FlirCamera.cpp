@@ -429,7 +429,7 @@ bool FlirCameraHandler::Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame)
 
     if (result)
     {
-        std::vector<uint64_t> ts_tests(5);
+        std::vector<uint64_t> ts_tests{GLOBAL_CONST_NCAMS};
         for (int j = 0; j<this->imageEventHandlers.size(); j++)
         {
             uint64_t value = frame.at(j).Timestamp.tv_sec * 1e3 + (frame.at(j).Timestamp.tv_nsec * 1e-6);
