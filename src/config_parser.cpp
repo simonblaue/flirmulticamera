@@ -5,7 +5,7 @@ namespace flirmulticamera {
 
 bool load_camera_settings(const std::string& settings_path, CameraSettings& settings) {
     // TODO: Add checking of env constants on specific build flag
-    // i.e. #IFDEFINE enable_system_checking (default on!) 
+    // i.e. #IFDEFINE fix_system_camera_size (default on!) 
     // if (!GLOBAL_CONST_NCAMS == settings.sns.size()){spdlog::error("something something")}
     // #ENDIF
     spdlog::info("Loading camera settings from {}", settings_path);
