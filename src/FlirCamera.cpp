@@ -250,8 +250,11 @@ void FlirCameraHandler::ConfigureCommon(CameraPtr pCam, INodeMap &nodeMap)
     // this->CamSettings.
     this->SetEnumerationType(nodeMap, "PixelFormat",  this->CamSettings.pixel_format);
     this->SetEnumerationType(nodeMap, "VideoMode", this->CamSettings.video_mode);
-    this->SetEnumerationType(nodeMap, "BinningControl", "Average");
-    this->SetIntType(nodeMap, "BinningVertical", this->CamSettings.binning_vertical);
+    // Can only access Binning if not in Mode0
+    if (this->CamSettings.video_mode != "Mode0") {
+        this->SetEnumerationType(nodeMap, "BinningControl", "Average");
+        this->SetIntType(nodeMap, "BinningVertical", this->CamSettings.binning_vertical);
+    }
     this->SetIntType(nodeMap, "Width", this->CamSettings.width);
     this->SetIntType(nodeMap, "Height", this->CamSettings.height);
 
@@ -306,7 +309,7 @@ bool FlirCameraHandler::Configure(void)
 {
     this->system = System::GetInstance();
     this->camList = this->system->GetCameras();
-    if (this->camList.GetSize() < GLOBAL_CONST_NCAMS)
+if (this->camList.GetSize() < GLOBAL_CONST_NCAMS)
     {
         spdlog::error(
             "Number of cameras detected ({}) < Number of cameras configured ({})",

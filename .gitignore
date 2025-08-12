@@ -1,1 +1,4 @@
 build/
+Acquisitions/*
+include/flirmulticamera/hardware_constants.h
+cfg/my_cfg.json
