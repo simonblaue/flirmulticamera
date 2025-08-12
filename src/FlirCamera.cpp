@@ -347,16 +347,17 @@ if (this->camList.GetSize() < GLOBAL_CONST_NCAMS)
             this->ConfigureSlave(nodeMap);
         }
     }
-    for (auto &SN_ordered : this->SNs)
-    {
-        if (SN_ordered == this->TopCamSN)
-        {
-            CameraPtr pCam = this->camList.GetBySerial(SN_ordered);
-            INodeMap &nodeMap = pCam->GetNodeMap();
-            this->SetFloatType(nodeMap, "Gain", this->CamSettings.gain - 2);
-            break;
-        }
-    }
+    // Setting the Gain fix for one camera lower than the others seems problematic
+    // for (auto &SN_ordered : this->SNs)
+    // {
+    //     if (SN_ordered == this->TopCamSN)
+    //     {
+    //         CameraPtr pCam = this->camList.GetBySerial(SN_ordered);
+    //         INodeMap &nodeMap = pCam->GetNodeMap();
+    //         this->SetFloatType(nodeMap, "Gain", this->CamSettings.gain - 2);
+    //         break;
+    //     }
+    // }
     this->StartAcquisition();
     // Crucial sleep, fails otherwise
     std::this_thread::sleep_for(std::chrono::seconds(2));

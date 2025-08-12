@@ -113,6 +113,10 @@ target_include_directories(${PROJECT_NAME} PUBLIC ${include_dirs})
 # ## Declare a C++ executable
 aux_source_directory(${PROJ_DIR}/src MAIN_SRC) # add all cpp files
 
+# stream synchronized videos
+add_executable(stream_synced_videos src/apps/stream_synced_videos.cpp ${MAIN_SRC})
+target_link_libraries(stream_synced_videos ${PROJECT_NAME})
+
 # record synchronized videos
 add_executable(record_synchronized_videos src/apps/synchronized_videos.cpp ${MAIN_SRC})
 target_link_libraries(record_synchronized_videos ${PROJECT_NAME})
