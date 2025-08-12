@@ -406,6 +406,18 @@ void FlirCameraHandler::Stop(void)
     }
 }
 
+// TODO: make the camera a template
+// TODO: template <typename Container>
+// void print_serials(const Container& c) {
+//     using std::data;
+//     using std::size;
+//     auto ptr  = data(c);
+//     auto n    = size(c);
+//     for (std::size_t i = 0; i < n; ++i) {
+//         std::cout << ptr[i] << "\n";
+//     }
+// }
+
 bool FlirCameraHandler::Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame)
 {
     bool result = true;
