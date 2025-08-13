@@ -1,7 +1,7 @@
 #pragma once
 
 #include <string>
-#include "cpp_utils/jsontools.h"
+#include <cpp_utils/jsontools.h>
 #include <flirmulticamera/hardware_constants.h>
 #include <spdlog/spdlog.h>
 
