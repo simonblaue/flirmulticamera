@@ -23,9 +23,13 @@ FLirCameraImageEventHandler::FLirCameraImageEventHandler(CameraPtr pCam, double 
     timespec now{};
     clock_gettime(CLOCK_MONOTONIC, &now);
     this->PreviousTimestamp = now;
+    this->imgPreviousTimestamp = 0;
+    pCam->TimestampLatch.Execute();
+    this->offsetTimestamp = pCam->Timestamp.GetValue();
     this->T = T;
     this->MarginOfError = T;
     this->firstFrameFlag = true;
+    this->pCam = pCam;
 }
 
 FLirCameraImageEventHandler::~FLirCameraImageEventHandler()
@@ -46,36 +50,47 @@ void FLirCameraImageEventHandler::OnImageEvent(ImagePtr img)
     else
     {
 
-        // std::cout<<this->SN<<" Diff Ptr TS: "<<this->last_ts - img->GetTimeStamp()<< std::endl;
-        this -> last_ts = img->GetTimeStamp();
+        // std::cout<<this->SN<<" Diff Ptr TS: "<<this->last_ts - img->GetChunkData().GetTimestamp()<< std::endl;
+        //this -> last_ts = img->GetChunkData().GetTimestamp() *  this->pCam->TimestampIncrement() * 1e-9;
+        spdlog::info("Current timestep {} s", ((double) (img->GetTimeStamp() - this->offsetTimestamp)) * this->pCam->TimestampIncrement() * 1e-9);
+        spdlog::info("Current timestep {} ticks", (double) (img->GetTimeStamp() - this->offsetTimestamp));
         if (this->BufferingFlag)
         {
             // convert and push into FIFO
             Frame frame;
             frame.Timestamp = monotime;
-            
+            frame.imgTimestamp = (img->GetChunkData().GetTimestamp()- this->offsetTimestamp) * this->pCam->TimestampIncrement() * 1e-9;
+
             frame.FrameCounter = this->FrameCounter++;
             // validate the timestamp to see if there is a out of sync
             if (this->firstFrameFlag)
             {
                 this->firstFrameFlag = false;
                 this->PreviousTimestamp = frame.Timestamp;
+                this->imgPreviousTimestamp = (img->GetChunkData().GetTimestamp() - this->offsetTimestamp) * this->pCam->TimestampIncrement() * 1e-9;
             }
             else
             {
                 double ts = static_cast<double>(frame.Timestamp.tv_sec) +static_cast<double>(frame.Timestamp.tv_nsec) * 1e-9;
                 double previous = static_cast<double>(this->PreviousTimestamp.tv_sec) +static_cast<double>(this->PreviousTimestamp.tv_nsec) * 1e-9;
+
+
                 // ts timstamp from system
                 // previous timestamp
                 // T 1/framerate
-                if(abs(ts - previous - this->T) > this->MarginOfError)
+                //if(abs(ts - previous - this->T) > this->MarginOfError)
+                double timediff = this->imgPreviousTimestamp - frame.imgTimestamp;
+                //spdlog::info("Timediff: {}", timediff);
+                if (abs(timediff - this->T) > this->MarginOfError)
                 {
-                    std::string msg = "Error::FlirCamera.cpp::Frame out of sync; FNo,SN: " + 
-                    std::to_string(frame.FrameCounter)+ ", " + this->SN + ", ";
-                    + "Difference:" + std::to_string(abs(ts - previous));
-                    spdlog::error(msg);
+                    // std::string msg = "Error::FlirCamera.cpp::Frame out of sync; FNo,SN,imTs,pTs: " + 
+                    // std::to_string(frame.FrameCounter)+ ", " + this->SN + ", ";
+                    // + "Difference:" + std::to_string(abs(timediff)) + std::to_string(frame.imgTimestamp) + 
+                    // std::to_string(this->imgPreviousTimestamp) ;
+                    // spdlog::error(msg);
                 }
                 this->PreviousTimestamp = frame.Timestamp;
+                this->imgPreviousTimestamp = frame.imgTimestamp;
             }
             frame.frameData = img;
             this->FIFO.push(frame);
@@ -111,6 +126,8 @@ void FLirCameraImageEventHandler::Start(void)
     clock_gettime(CLOCK_MONOTONIC, &now);
     this->FrameCounter = 0;
     this->PreviousTimestamp = now;
+    this->offsetTimestamp = this->pCam->Timestamp.GetValue();
+    this->imgPreviousTimestamp = (this->pCam->Timestamp.GetValue() - this->offsetTimestamp) * this->pCam->TimestampIncrement.GetValue() * 1e-9;
     this->BufferingFlag = true;
 }
 
@@ -272,14 +289,17 @@ void FlirCameraHandler::ConfigureCommon(CameraPtr pCam, INodeMap &nodeMap)
     this->SetEnumerationType(nodeMap, "BalanceWhiteAuto", "Off");
     this->SetFloatType(nodeMap, "ExposureTime", this->CamSettings.exposure_time);
 
-    this->SetBooleanType(nodeMap, "ChunkModeActive", false);
-    // this->SetBooleanType(nodeMap, "ChunkModeActive", true);
-    // this->SetEnumerationType(nodeMap, "ChunkSelector", "Timestamp");
-    // this->SetBooleanType(nodeMap, "ChunkEnable", true);
+    //this->SetBooleanType(nodeMap, "ChunkModeActive", false);
+    this->SetBooleanType(nodeMap, "ChunkModeActive", true);
+    this->SetEnumerationType(nodeMap, "ChunkSelector", "Timestamp");
+    this->SetBooleanType(nodeMap, "ChunkEnable", true);
 
     FLirCameraImageEventHandler *imgEventHandlerTmp = new FLirCameraImageEventHandler{pCam, 1.0 / this->CamSettings.fps};
     this->imageEventHandlers.push_back(imgEventHandlerTmp);
     pCam->RegisterEventHandler(*this->imageEventHandlers[this->imageEventHandlers.size() - 1]);
+
+    // this->SetCommand(nodeMap, "TimestampLatch");
+
 }
 
 void FlirCameraHandler::ConfigureMaster(INodeMap &nodeMap)
@@ -357,7 +377,8 @@ bool FlirCameraHandler::Configure(void)
     //         CameraPtr pCam = this->camList.GetBySerial(SN_ordered);
     //         INodeMap &nodeMap = pCam->GetNodeMap();
     //         this->SetFloatType(nodeMap, "Gain", this->CamSettings.gain - 2);
-    //         break;
+    //         break;// TODO ifdef fix_system_camera_size -> use array, else vector
+
     //     }
     // }
     this->StartAcquisition();
@@ -375,10 +396,12 @@ void FlirCameraHandler::StartAcquisition(void)
         // start mastercam last
         if (SN_ordered != this->MasterCamSN)
         {
+            //pCam->TimestampReset();
             pCam->BeginAcquisition();
         }
     }
     CameraPtr pCam = this->camList.GetBySerial(this->MasterCamSN);
+    //pCam->TimestampReset();
     pCam->BeginAcquisition();
 }
 

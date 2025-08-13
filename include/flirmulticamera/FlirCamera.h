@@ -21,6 +21,7 @@ struct Frame
 {
     Spinnaker::ImagePtr frameData;
     timespec Timestamp;
+    double imgTimestamp;
     uint64_t FrameCounter;
 };
 
@@ -33,9 +34,12 @@ private:
     double MarginOfError;
     double T;
     timespec PreviousTimestamp;
+    double imgPreviousTimestamp;
+    uint64_t offsetTimestamp;
     bool firstFrameFlag;
     std::atomic<bool> BufferingFlag;
     uint64_t last_ts;
+    Spinnaker::CameraPtr pCam;
     // FIFO
 public:
     std::string SN;

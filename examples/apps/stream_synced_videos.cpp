@@ -61,14 +61,8 @@ int main(int argc, char **argv)
 
     fcamhandler.Start();
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
-    // Setting up terminal for stoping recording
-
 
     spdlog::info("Hit 'q' to stop streaming.");
-    // size_t i = 0;
-    // size_t n_capture_frames = 500;
-    // cpp_utils::ProgressBar progress_bar(n_capture_frames);
-    // while (i < n_capture_frames){
     while (cv::waitKey(1) != 113) {
        
 
@@ -92,6 +86,7 @@ int main(int argc, char **argv)
 
     fcamhandler.Stop();
 
+    spdlog::info("Goodbye");
     cv::destroyAllWindows();
     return 0;
 
