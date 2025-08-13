@@ -131,6 +131,7 @@ void FLirCameraImageEventHandler::Pop(void)
     }
 }
 
+// TODO dynamic
 FlirCameraHandler::FlirCameraHandler(CameraSettings CamSettings) : CamSettings(CamSettings)
 {
     for (int i = 0; i < GLOBAL_CONST_NCAMS; i++)
@@ -311,7 +312,8 @@ bool FlirCameraHandler::Configure(void)
 {
     this->system = System::GetInstance();
     this->camList = this->system->GetCameras();
-if (this->camList.GetSize() < GLOBAL_CONST_NCAMS)
+    // TODO Dynamic
+    if (this->camList.GetSize() < GLOBAL_CONST_NCAMS)
     {
         spdlog::error(
             "Number of cameras detected ({}) < Number of cameras configured ({})",
@@ -410,6 +412,8 @@ void FlirCameraHandler::Stop(void)
     }
 }
 
+// TODO ifdef fix_system_camera_size -> use array, else vector
+// bool FlirCameraHandler::Get(std::vector<Frame> &frame)
 bool FlirCameraHandler::Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame)
 {
     bool result = true;
@@ -424,7 +428,7 @@ bool FlirCameraHandler::Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame)
         }
         // i++;
     }
-    for (std::uint8_t i = 0; i< GLOBAL_CONST_NCAMS; i++)
+    for (std::size_t i = 0; i<frame.size(); i++)
     {
         Frame frame_one_cam;
         if (!this->imageEventHandlers.at(i)->Get(frame.at(i)))
@@ -435,8 +439,8 @@ bool FlirCameraHandler::Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame)
 
     if (result)
     {
-        std::vector<uint64_t> ts_tests(5);
-        for (int j = 0; j<this->imageEventHandlers.size(); j++)
+        std::vector<uint64_t> ts_tests{frame.size()};
+        for (std::size_t j = 0; j<this->imageEventHandlers.size(); j++)
         {
             uint64_t value = frame.at(j).Timestamp.tv_sec * 1e3 + (frame.at(j).Timestamp.tv_nsec * 1e-6);
         }

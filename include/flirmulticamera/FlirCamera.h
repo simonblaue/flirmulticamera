@@ -85,6 +85,7 @@ public:
     bool Configure(void);
     void Start(void);
     void Stop(void);
+    // TODO overload/dynamic method
     bool Get(std::array<Frame, GLOBAL_CONST_NCAMS> &frame);
     bool IsFIFOEmpty(void);
 };
